@@ -1,170 +1,108 @@
 <?php
-
-require(APPPATH.'/libraries/REST_Controller.php');
- 
-class Recipient extends REST_Controller{
-    
-    public function __construct()
-    {
+  class Recipient_model extends CI_Model {
+       
+      public function __construct(){
+          
+        $this->load->database();
         
-        parent::__construct();
+      }
+      
+      //API call - get a usergroup record by id
+      public function getusergroupbyid($id){  
 
-        $this->load->model('usergroup_model');
-    }
+           $this->db->select('id,organisation_code,fullname,ic_no,address,state_id,age,phone_no,no_family,income,status,created_dt,created_by,updated_dt,updated_by');
 
-    //API - client sends id and on valid id usergroup information is sent back
-    function usergroupById_get(){
+           $this->db->from('sfb_receivers');
 
-        $id  = $this->get('id');
-        
-        if(!$id){
+           $this->db->where('id',$id);
 
-            $this->response("No ID specified", 400);
-
-            exit;
-        }
-
-        $result = $this->usergroup_model->getusergroupbyid( $id );
-
-        if($result){
-
-            $this->response($result, 200); 
-
-            exit;
-        } 
-        else{
-
-             $this->response("Invalid ID", 404);
-
-            exit;
-        }
-    } 
-
-    //API -  Fetch All uergroups
-    function usergroups_get(){
-
-        $result = $this->usergroup_model->getallusergroups();
-
-        if($result){
-
-            $this->response($result, 200); 
-
-        } 
-
-        else{
-
-            $this->response("No record found", 404);
-
-        }
-    }
-     
-    //API - create a new usergroup item in database.
-    function addUsergroup_post(){
-        // decode input from angular. The form of input is a json encoded
-        $json = json_decode(file_get_contents('php://input'),true);
-        //check the content of array
-        if(!empty($json['code'])&&!empty($json['desc'])){
+           $query = $this->db->get();
            
-            //initialize variable code
-            $code=$json['code'];
-           //initialize variable desc
-            $desc=$json['desc'];
-            
+           if($query->num_rows() == 1)
+           {
+
+               return $query->result_array();
+
+           }
+           else
+           {
+
+             return 0;
+
+          }
+
+      }
+
+    //API call - get all usergroups record
+    public function getallusergroups(){   
+
+        $this->db->select('id,organisation_code,fullname,ic_no,address,state_id,age,phone_no,no_family,income,status,created_dt,created_by,updated_dt,updated_by');
+
+        $this->db->from('sfb_receivers');
+
+        $this->db->order_by("created_dt", "desc"); 
+
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0){
+
+          return $query->result_array();
+
+        }else{
+
+          return 0;
+
         }
 
-        $now = date('Y-m-d H:i:s');
-
-         $created_dt=$now;
+    }
    
-         if(!$code || !$desc ){
+   //API call - delete a usergroup record
+    public function delete($id){
 
-                $this->response("Enter complete usergroup information to save", 400);
+       $this->db->where('id', $id);
 
-         }else{
+       if($this->db->delete('sfb_receivers')){
 
-            $result = $this->usergroup_model->add(array("code"=>$code, "desc"=>$desc,"created_dt"=>$created_dt));
+          return true;
 
-            if($result === 0){
+        }else{
 
-                $this->response("Usergroup information could not be saved. Try again.", 404);
+          return false;
 
-            }else{
+        }
 
-                $this->response("success", 200);  
-           
-            }
+   }
+   
+   //API call - add new usergroup record
+    public function add($data){
+
+        if($this->db->insert('sfb_receivers', $data)){
+
+           return true;
+
+        }else{
+
+           return false;
 
         }
 
     }
-    function updateUsergroup_post(){
-
-        $now = date('Y-m-d H:i:s');
-        // decode input from angular. The form of input is a json encoded
-        $json = json_decode(file_get_contents('php://input'),true);
-        
-        //check the content of array
-        if(!empty($json['code'])&&!empty($json['desc'])){
-             $id=$json['id'];
-
-            $code=$json['code'];
-
-            $desc=$json['desc'];
-        }
-        
-         $updated_dt = $now;
-         
-         if(!$code || !$desc ){
-
-                $this->response("Enter complete state information to save", 400);
-
-         }else{
-            $result = $this->usergroup_model->update($id, array("code"=>$code, "desc"=>$desc,"updated_dt"=>$now));
-
-            if($result === 0){
-
-                $this->response("State information could not be saved. Try again.", 404);
-
-            }else{
-
-                $this->response("success", 200);  
-
-            }
-
-        }
-
-    }
-
     
+    //API call - update a usergroup record
+    public function update($id, $data){
 
-    //API - delete usergroup
-    function deleteUsergroup_post()
-    {
-        $json = json_decode(file_get_contents('php://input'),true);
-        $id=$json['id'];
-      // $id=$this->delete('id');
-        //var_dump($id);
+       $this->db->where('id', $id);
 
-        if(!$id){
+       if($this->db->update('sfb_receivers', $data)){
 
-            $this->response("Parameter missing", 404);
+          return true;
 
-        }
-         
-        if($this->usergroup_model->delete($id))
-        {
+        }else{
 
-            $this->response("Success", 200);
-
-        } 
-        else
-        {
-
-            $this->response("Failed", 400);
+          return false;
 
         }
 
     }
-
 
 }
