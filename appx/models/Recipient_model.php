@@ -16,6 +16,8 @@
 
            $this->db->where('id',$id);
 
+           $this->db->join('sfb_organizations','sfb_organizations.code=sfb_receivers.organisation_code','inner');
+
            $query = $this->db->get();
            
            if($query->num_rows() == 1)
@@ -40,6 +42,7 @@
 
         $this->db->from('sfb_receivers');
         
+        $this->db->join('sfb_organizations','sfb_organizations.code=sfb_receivers.organisation_code','inner');
 
         $this->db->order_by("created_dt", "desc"); 
 
