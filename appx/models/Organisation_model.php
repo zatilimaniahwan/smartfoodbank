@@ -8,11 +8,11 @@
       }
       
       //API call - get a usergroup record by id
-      public function getusergroupbyid($id){  
+      public function getorganizationbyid($id){  
 
-           $this->db->select('id,code,desc,created_dt');
+           $this->db->select('id,reg_no,code,org_name,address,state_id,email,tel_no,fax_no');
 
-           $this->db->from('sfb_usergroups');
+           $this->db->from('sfb_organizations');
 
            $this->db->where('id',$id);
 
@@ -34,11 +34,11 @@
       }
 
     //API call - get all usergroups record
-    public function getallusergroups(){   
+    public function getallorganizations(){   
 
-        $this->db->select('id,code,desc,created_dt');
+      $this->db->select('id,reg_no,code,org_name,address,state_id,email,tel_no,fax_no');
 
-        $this->db->from('sfb_usergroups');
+        $this->db->from('sfb_organizations');
 
         $this->db->order_by("created_dt", "desc"); 
 
@@ -61,7 +61,7 @@
 
        $this->db->where('id', $id);
 
-       if($this->db->delete('sfb_usergroups')){
+       if($this->db->delete('sfb_organizations')){
 
           return true;
 
@@ -76,7 +76,7 @@
    //API call - add new usergroup record
     public function add($data){
 
-        if($this->db->insert('sfb_usergroups', $data)){
+        if($this->db->insert('sfb_organizations', $data)){
 
            return true;
 
@@ -93,7 +93,7 @@
 
        $this->db->where('id', $id);
 
-       if($this->db->update('sfb_usergroups', $data)){
+       if($this->db->update('sfb_organizations', $data)){
 
           return true;
 
