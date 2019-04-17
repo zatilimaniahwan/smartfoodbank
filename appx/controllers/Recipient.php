@@ -63,32 +63,33 @@ class Recipient extends REST_Controller{
         // decode input from angular. The form of input is a json encoded
         $json = json_decode(file_get_contents('php://input'),true);
         //check the content of array
-        
-        if(!empty($json['organization_code'])&&!empty($json['fullname'])&&!empty($json['ic'])&&!empty($json['address'])&&!empty($json['state_id'])&&!empty(['age'])&&!empty($json['tel_no'])&&!empty($json['family_no'])&&!empty($json['income'])){
-           $organization_code = $json['organization_code'];
+        var_dump($json);
+        $fullname="";
+        if(!empty($json['fullname'])&&!empty($json['ic'])&&!empty($json['address'])&&!empty($json['state'])&&!empty($json['age'])&&!empty($json['tel_no'])&&!empty($json['family_no'])&&!empty($json['income'])){
+           //$organization_code = $json['organization_code'];
            $fullname=$json['fullname'];
+           //var_dump($fullname);exit;
            $ic_no=$json['ic'];
            $address=$json['address'];
-           $state_id=$json['state_id'];
+           $state_id=$json['state'];
            $age=$json['age'];
            $income=$json['income'];
-           $state_id=$json['state_id'];
            $phone_no=$json['tel_no'];
            $no_family=$json['family_no']; 
         }
 
         $now = date('Y-m-d H:i:s');
-         $status=1;
          $created_dt=$now;
-         $created_by='admin';
+         $created_by="admin";
+         $organization_code="KSK";
    
-         if(!$organization_code || !$fullname || !$ic_no || !$address || !$state_id || !$age || !$income || !$phone_no || !$no_family ){
+         if(!$fullname || !$ic_no || !$address || !$state_id || !$age || !$income || !$phone_no || !$no_family){
 
                 $this->response("Enter complete recipient information to save", 400);
 
          }else{
 
-            $result = $this->recipient_model->add(array("organization_code"=>$organization_code, "fullname"=>$fullname,"ic_no"=>$ic_no,"address"=>$address,"state_id"=>$state_id,"age"=>$age,"phone_no"=>$phone_no,"no_family"=>$no_family,"income"=>$income,"status"=>$status,"created_dt"=>$created_dt,"created_by"=>$created_by));
+            $result = $this->recipient_model->add(array("organisation_code"=>$organization_code, "fullname"=>$fullname,"ic_no"=>$ic_no,"address"=>$address,"state_id"=>$state_id,"age"=>$age,"phone_no"=>$phone_no,"no_family"=>$no_family,"income"=>$income,"status"=>1,"created_dt"=>$created_dt,"created_by"=>$created_by));
 
             if($result === 0){
 
@@ -110,16 +111,15 @@ class Recipient extends REST_Controller{
         $json = json_decode(file_get_contents('php://input'),true);
         
         //check the content of array
-        if(!empty($json['id'])&&!empty($json['organization_code'])&&!empty($json['fullname'])&&!empty($json['ic'])&&!empty($json['address'])&&!empty($json['state_id'])&&!empty(['age'])&&!empty($json['tel_no'])&&!empty($json['family_no'])&&!empty($json['income'])&&!empty($json['status'])){
+        if(!empty($json['id'])&&!empty($json['organization_code'])&&!empty($json['fullname'])&&!empty($json['ic'])&&!empty($json['address'])&&!empty($json['state'])&&!empty(['age'])&&!empty($json['tel_no'])&&!empty($json['family_no'])&&!empty($json['income'])&&!empty($json['status'])){
             $id=$json['id'];
             $organization_code = $json['organization_code'];
             $fullname=$json['fullname'];
             $ic_no=$json['ic'];
             $address=$json['address'];
-            $state_id=$json['state_id'];
+            $state_id=$json['state'];
             $age=$json['age'];
             $income=$json['income'];
-            $state_id=$json['state_id'];
             $phone_no=$json['tel_no'];
             $no_family=$json['family_no'];
             $status=$json['status']; 

@@ -8,7 +8,7 @@
       }
       
       //API call - get a usergroup record by id
-      public function getusergroupbyid($id){  
+      public function getrecipientbyid($id){  
 
            $this->db->select('id,organisation_code,fullname,ic_no,address,state_id,age,phone_no,no_family,income,status,created_dt,created_by,updated_dt,updated_by');
 
@@ -34,11 +34,12 @@
       }
 
     //API call - get all usergroups record
-    public function getallusergroups(){   
+    public function getallrecipients(){   
 
         $this->db->select('id,organisation_code,fullname,ic_no,address,state_id,age,phone_no,no_family,income,status,created_dt,created_by,updated_dt,updated_by');
 
         $this->db->from('sfb_receivers');
+        
 
         $this->db->order_by("created_dt", "desc"); 
 

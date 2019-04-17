@@ -14,6 +14,12 @@
 
            $this->db->from('sfb_donations');
 
+           $this->db->join('sfb_foods','sfb_foods.id=sfb_donations.food_id','inner');
+
+           $this->db->join('sfb_receivers','sfb_receivers.id=sfb_donations.receiver_id','inner');
+
+           $this->db->join('sfb_staffs','sfb_staffs.staff_id=sfb_donations.staff_id','inner');
+
            $this->db->where('id',$id);
 
            $query = $this->db->get();
@@ -39,6 +45,12 @@
         $this->db->select('id,food_id,receiver_id,staff_id,status,created_dt,updated_dt');
 
         $this->db->from('sfb_donations');
+
+        $this->db->join('sfb_foods','sfb_foods.id=sfb_donations.food_id','inner');
+
+        $this->db->join('sfb_receivers','sfb_receivers.id=sfb_donations.receiver_id','inner');
+
+        $this->db->join('sfb_staffs','sfb_staffs.staff_id=sfb_donations.staff_id','inner');
 
         $this->db->order_by("id", "desc"); 
 
