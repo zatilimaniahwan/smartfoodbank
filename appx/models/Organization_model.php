@@ -1,5 +1,5 @@
 <?php
-  class Organisation_model extends CI_Model {
+  class Organization_model extends CI_Model {
        
       public function __construct(){
           

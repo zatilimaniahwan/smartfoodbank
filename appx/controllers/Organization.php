@@ -102,7 +102,7 @@ class Organization extends REST_Controller{
         }
 
     }
-    function updateUsergroup_post(){
+    function updateOrganization_post(){
 
         $now = date('Y-m-d H:i:s');
         // decode input from angular. The form of input is a json encoded
@@ -110,6 +110,7 @@ class Organization extends REST_Controller{
         
         //check the content of array
         if(!empty($json['reg_no'])&&!empty($json['org_name'])&&!empty($json['code'])&&!empty($json['address'])&&!empty($json['state'])&&!empty($json['email'])&&!empty($json['tel_no'])){
+            $id=$json['id'];
             $reg_no=$json['reg_no'];
             $org_name=$json['org_name'];
             $code=$json['code'];
@@ -128,7 +129,7 @@ class Organization extends REST_Controller{
                 $this->response("Enter complete organization information to save", 400);
 
          }else{
-            $result = $this->organization_model->update($id, array("reg_no"=>$reg_no,"org_name"=>$org_name,"code"=>$code,"address"=>$address,"state_id"=>$state_id,"email"=>$email,"tel_no"=>$tel_no,"fax_no"=>$fax_no,"updated_dt"=>$cupdated_dt,"updated_by"=>$updated_by));
+            $result = $this->organization_model->update($id, array("reg_no"=>$reg_no,"org_name"=>$org_name,"code"=>$code,"address"=>$address,"state_id"=>$state_id,"email"=>$email,"tel_no"=>$tel_no,"fax_no"=>$fax_no,"updated_dt"=>$updated_dt,"updated_by"=>$updated_by));
 
             if($result === 0){
 
@@ -147,7 +148,7 @@ class Organization extends REST_Controller{
     
 
     //API - delete usergroup
-    function deleteUsergroup_post()
+    function deleteOrganization_post()
     {
         $json = json_decode(file_get_contents('php://input'),true);
         $id=$json['id'];
@@ -160,7 +161,7 @@ class Organization extends REST_Controller{
 
         }
          
-        if($this->usergroup_model->delete($id))
+        if($this->organization_model->delete($id))
         {
 
             $this->response("Success", 200);
